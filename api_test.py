@@ -11,19 +11,19 @@ api_key = os.getenv("API_KEY")  # Retrieve your API key
 client = genai.Client(api_key=api_key)
 
 prompt = """
-- Create a YouTube thumbnail from the images that I have provided.
-- Use the outline image to create the thumbnail.
-- Make sure my face is clearly used for the character in the scene.
-- Make the scene isresistable to clickbait.
-- Follow YouTube spec on size and aspect ratio.
+- Create a YouTube thumbnail from the image that I have provided.
+- Convert the screenshot into an impressionistic style, as if Monet himself had painted it.
+- Make sure the image is in the correct size and aspect ratio.
+- Make sure the image is in the correct format.
+- I want captions around the image to be clickbait friendly. Don't hold back on the clickbait titles.
+- Text should read "tormenting myself with this YouTube thumbnail generator".
 """
 
-outline_image = Image.open("outline.png")
-face_image = Image.open("screenshot_of_me.png")
+face_image = Image.open("images/input/screenshot_2025-10-17.png")
 
 response = client.models.generate_content(
     model="gemini-2.5-flash-image",
-    contents=[prompt, outline_image, face_image],
+    contents=[prompt, face_image],
 )
 
 for part in response.candidates[0].content.parts:
@@ -31,4 +31,4 @@ for part in response.candidates[0].content.parts:
         print(part.text)
     elif part.inline_data is not None:
         image = Image.open(BytesIO(part.inline_data.data))
-        image.save("generated_image.png")
+        image.save("images/output/generated_image.png")
