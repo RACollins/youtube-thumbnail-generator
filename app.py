@@ -124,17 +124,19 @@ class MainPage:
             st.session_state["modified_image"].save(img_buffer, format="PNG")
             img_bytes = img_buffer.getvalue()
 
-            st.download_button(
-                label="Download Modified Image",
-                data=img_bytes,
-                file_name="modified_image.png",
-                mime="image/png",
-            )
+            left_button, right_button = st.columns([6, 1])
 
-            # Add a delet button  to clear session state for modified image
-            if st.button("🗑️ Delete Modified Image"):
-                del st.session_state["modified_image"]
-                st.experimental_rerun()
+            with left_button:
+                st.download_button(
+                    label="💾 Download",
+                    data=img_bytes,
+                    file_name="modified_image.png",
+                    mime="image/png",
+                )
+            with right_button:
+                if st.button("🗑️ Delete"):
+                    del st.session_state["modified_image"]
+                    st.experimental_rerun()
         else:
             st.info("☝️ No modified image found. Please generate an image first.")
 
