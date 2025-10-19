@@ -119,6 +119,22 @@ class MainPage:
         if "modified_image" in st.session_state:
             st.header("Modified Image")
             st.image(st.session_state["modified_image"], use_column_width=True)
+            # Convert PIL Image to bytes for download
+            img_buffer = BytesIO()
+            st.session_state["modified_image"].save(img_buffer, format="PNG")
+            img_bytes = img_buffer.getvalue()
+
+            st.download_button(
+                label="Download Modified Image",
+                data=img_bytes,
+                file_name="modified_image.png",
+                mime="image/png",
+            )
+
+            # Add a delet button  to clear session state for modified image
+            if st.button("🗑️ Delete Modified Image"):
+                del st.session_state["modified_image"]
+                st.experimental_rerun()
         else:
             st.info("☝️ No modified image found. Please generate an image first.")
 
