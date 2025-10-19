@@ -15,24 +15,19 @@ class MainPage:
             return None
         return img_original
 
-
     def render_file_uploader(self):
         st.title(self.title)
         st.write(self.description)
 
-        img_file = st.file_uploader("Choose a file", type=["jpg", "png", "jpeg"])        
+        img_file = st.file_uploader("Choose a file", type=["jpg", "png", "jpeg"])
         img_original = self.check_image_file(img_file)
 
         if img_original is not None:
             return img_original
         else:
             return None
-    
+
     def render_sidebar(self):
-        
-    def render_image_modifier(self, img_original):
-        # Sidebar for user input
-        ### Sidebar for API key input
         with st.sidebar:
             st.header("🔑 Configuration")
 
@@ -69,10 +64,15 @@ class MainPage:
                 st.session_state.api_key = ""
                 st.rerun()
 
+    def render_image_modifier(self, img_original):
+        # Call the sidebar logic for API key/input configuration
+        self.render_sidebar()
+        # (Other code for modifying the image would go here)
+
 
 def main():
     main_page = MainPage()
-    
+
     img_original = main_page.render_file_uploader()
     if img_original is not None:
         main_page.render_image_modifier(img_original)
