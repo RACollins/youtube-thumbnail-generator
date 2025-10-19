@@ -10,6 +10,11 @@ class MainPage:
     def check_image_file(self, img_file):
         if img_file is not None:
             img_original = Image.open(img_file)
+            # Check session state for image file
+            if "img_original" not in st.session_state:
+                st.session_state["img_original"] = img_original
+            else:
+                img_original = st.session_state["img_original"]
         else:
             st.info("☝️ Upload a .jpg or .png file")
             return None
@@ -33,19 +38,19 @@ class MainPage:
 
             # Use session state to manage API key securely
             if "api_key" not in st.session_state:
-                st.session_state.api_key = ""
+                st.session_state["api_key"] = ""
 
             api_key = st.text_input(
                 "Google API Key",
                 type="password",
-                value=st.session_state.api_key,
+                value=st.session_state["api_key"],
                 help="Enter your Google API key to enable thumbnail generation",
                 key="api_key_input",
             )
 
             # Update session state when user changes the key
-            if api_key != st.session_state.api_key:
-                st.session_state.api_key = api_key
+            if api_key != st.session_state["api_key"]:
+                st.session_state["api_key"] = api_key
 
             if api_key:
                 st.success("✅ API key configured")
@@ -61,13 +66,38 @@ class MainPage:
 
             # Add a clear button for security
             if st.button("🗑️ Clear API Key"):
-                st.session_state.api_key = ""
+                st.session_state["api_key"] = ""
                 st.rerun()
+
+            st.divider()
+
+            # user prompt input
+            st.header("🎨 Image Modifier")
+
+            if "user_prompt" not in st.session_state:
+                st.session_state["user_prompt"] = ""
+
+            user_prompt = st.text_area(
+                "How do you want to modify the image?",
+                value=st.session_state["user_prompt"],
+                help="Enter your prompt here",
+                key="user_prompt_input",
+            )
+
+            if user_prompt != st.session_state["user_prompt"]:
+                st.session_state["user_prompt"] = user_prompt
+
+            if st.button("🔄 Generate Image"):
+                self.generate_image(
+                    st.session_state["img_original"], st.session_state["user_prompt"]
+                )
 
     def render_image_modifier(self, img_original):
         # Call the sidebar logic for API key/input configuration
         self.render_sidebar()
-        # (Other code for modifying the image would go here)
+
+        st.header("Original Image")
+        st.image(img_original, use_column_width=True)
 
 
 def main():
