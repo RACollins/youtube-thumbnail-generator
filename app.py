@@ -43,11 +43,8 @@ class MainPage:
         for part in response.candidates[0].content.parts:
             if part.inline_data is not None:
                 modified_image = Image.open(BytesIO(part.inline_data.data))
-                # Check session state for modified image
-                if "modified_image" not in st.session_state:
-                    st.session_state["modified_image"] = modified_image
-                else:
-                    modified_image = st.session_state["modified_image"]
+                # Overwrite the session state variable with the new modified image
+                st.session_state["modified_image"] = modified_image
 
     def render_sidebar(self):
         with st.sidebar:
