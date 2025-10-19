@@ -41,11 +41,13 @@ class MainPage:
             contents=[user_prompt, img_original],
         )
         for part in response.candidates[0].content.parts:
-            if part.text is not None:
-                st.write(part.text)
-            elif part.inline_data is not None:
+            if part.inline_data is not None:
                 modified_image = Image.open(BytesIO(part.inline_data.data))
-                st.image(modified_image, use_column_width=True)
+                # Check session state for modified image
+                if "modified_image" not in st.session_state:
+                    st.session_state["modified_image"] = modified_image
+                else:
+                    modified_image = st.session_state["modified_image"]
 
     def render_sidebar(self):
         with st.sidebar:
@@ -113,6 +115,15 @@ class MainPage:
 
         st.header("Original Image")
         st.image(img_original, use_column_width=True)
+
+        st.divider()
+
+        # Check for modified image in session state
+        if "modified_image" in st.session_state:
+            st.header("Modified Image")
+            st.image(st.session_state["modified_image"], use_column_width=True)
+        else:
+            st.info("☝️ No modified image found. Please generate an image first.")
 
 
 def main():
