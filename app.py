@@ -1,5 +1,7 @@
 import streamlit as st
 from PIL import Image
+from io import BytesIO
+from google import genai
 
 
 class MainPage:
@@ -31,6 +33,19 @@ class MainPage:
             return img_original
         else:
             return None
+
+    def generate_image(self, img_original, user_prompt):
+        client = genai.Client(api_key=st.session_state["api_key"])
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-image",
+            contents=[user_prompt, img_original],
+        )
+        for part in response.candidates[0].content.parts:
+            if part.text is not None:
+                st.write(part.text)
+            elif part.inline_data is not None:
+                modified_image = Image.open(BytesIO(part.inline_data.data))
+                st.image(modified_image, use_column_width=True)
 
     def render_sidebar(self):
         with st.sidebar:
