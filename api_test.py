@@ -11,15 +11,22 @@ api_key = os.getenv("API_KEY")  # Retrieve your API key
 client = genai.Client(api_key=api_key)
 
 prompt = """
+# Composition Guidelines:
 - Create a YouTube thumbnail from the image that I have provided.
-- Convert the screenshot into an impressionistic style, as if Monet himself had painted it.
+- "Add an AI powered agent looming over me in the image that says 'It'll be ok, I'm here to help' and has a smile on their face".
+- Make sure the agent is masculine looking and has a beard.
+
+# Output image guidelines:
 - Make sure the image is in the correct size and aspect ratio.
 - Make sure the image is in the correct format.
+
+# Additional Guidelines:
 - I want captions around the image to be clickbait friendly. Don't hold back on the clickbait titles.
-- Text should read "tormenting myself with this YouTube thumbnail generator".
+- Make the text shorter and more concise.
+- Text should read "almost there...".
 """
 
-face_image = Image.open("images/input/screenshot_2025-10-17.png")
+face_image = Image.open("images/input/screenshot_2025-10-20.png")
 
 response = client.models.generate_content(
     model="gemini-2.5-flash-image",

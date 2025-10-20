@@ -8,4 +8,6 @@ dependencies = [
     "google-genai>=1.45.0",
     "pillow>=12.0.0",
     "python-dotenv>=1.1.1",
+    "standard-imghdr>=3.13.0",
+    "streamlit>=1.22.0",
 ]
