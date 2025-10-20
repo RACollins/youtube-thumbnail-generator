@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from io import BytesIO
 from google import genai
+from prompts.prompt_manager import PromptManager
 
 
 class MainPage:
@@ -101,9 +102,28 @@ class MainPage:
             if user_prompt != st.session_state["user_prompt"]:
                 st.session_state["user_prompt"] = user_prompt
 
+            # Style selector
+            style_selector = st.selectbox(
+                "Select a style",
+                ["Neutral", "Funny", "Serious", "Inspiring"],
+                index=0,
+                key="style_selector",
+            )
+
+            if style_selector != st.session_state["style_selector"]:
+                st.session_state["style_selector"] = style_selector
+
+            # Generate full prompt
+            full_prompt = PromptManager.get_prompt(
+                "main_prompt_template",
+                user_prompt=user_prompt,
+                style_selector=style_selector,
+            )
+
             if st.button("🔄 Generate Image"):
                 self.generate_image(
-                    st.session_state["img_original"], st.session_state["user_prompt"]
+                    st.session_state["img_original"],
+                    full_prompt
                 )
 
     def render_image_modifier(self, img_original):
