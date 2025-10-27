@@ -2,7 +2,8 @@
 
 An AI-powered Streamlit application that generates eye-catching YouTube thumbnails using Google's Gemini 2.5 Flash Image model.
 
-**🌐 Live App:** TBC
+**🌐 Live App:** [https://youtubethumbnailgenerator.streamlit.app/](https://youtubethumbnailgenerator.streamlit.app/)
+
 
 ## Features
 
